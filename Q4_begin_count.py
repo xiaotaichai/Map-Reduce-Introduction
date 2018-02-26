@@ -1,5 +1,4 @@
 from mrjob.job import MRJob
-from pandas import Series
 import re
 
 WORD_RE = re.compile(r"[\w']+")
@@ -7,9 +6,10 @@ WORD_RE = re.compile(r"[\w']+")
 class MRWordFrequencyCount(MRJob):
 
     def mapper(self, _, line):
-        for word in WORD_RE.findall(line):
+        words = WORD_RE.findall(line)
+        for word in words:
             s = [word[0].lower()]
-        yield (s, len(word))
+        yield (s, len(words))
 
     def reducer(self, key, values):
     	yield (key, sum(values))
